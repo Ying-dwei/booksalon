@@ -23,6 +23,7 @@
                 border: 2px solid lightgray;
             }
             .book{
+                position: relative;
                 width: 150px;
                 height: 200px;
                 float: left;
@@ -36,6 +37,11 @@
                 text-decoration: none;
                 cursor: pointer;
 
+            }
+            .booki{
+                position: absolute;
+                top: 115px;
+                left: 21px;
             }
             .td1,.td4{
                 width: 30px;
@@ -59,11 +65,25 @@
             td{
                 text-align: center;
             }
+            .bar{
+                position: fixed;
+                width: 100%;
+                /*border: 1px solid red;*/
+            }
+            .bartton{
+                float: right;
+                margin-right: 100px;
+            }
         </style>
     </head>
     <body>
+        <div class="bar">
+            <div class="bartton">
+                <button>＋ 新增書目</button>
+                <button>＋ 註冊帳號</button>
+            </div>
+        </div>
         <h1>booksalon</h1>
-        
         <div class="part_1">
             <div class="book_all">
             </div>
@@ -86,6 +106,58 @@
         $(function(){
             var subUrl = 'http://127.0.0.1:8080';
 
+            //              //
+            //              //
+            //     book     //
+            //              //
+            //              //
+
+
+            var book_all = $('.book_all');
+            $.ajax({
+                url: subUrl+'/api/getBook',
+                type: 'GET'
+            })
+            .done(function(res){
+                // console.log(res.status);
+                for(var i=0; i<res.status.length ; i++){
+                    var div = document.createElement('div');
+                    div.className = 'book';
+                    div.innerHTML = `
+                        <div id="`+res.status[i].id+`" class="aaa" >
+                            <div>`+res.status[i].name+`</div>
+                            <br>
+                            <br>
+                            <img class="booki" src="https://unsplash.it/`+(100+i)+`" alt="" />
+                        </div>
+                    `;
+
+                    div.id = 'book_'+res.status[i].id;
+                    $(div).appendTo(book_all);
+                }
+                
+                $('.aaa').on('click',function(){
+
+                    if ( user_id != 0 ) {
+
+                        window.location.href = './booksalon/addArc?id='+ user_id+'&book='+this.id;
+                    }else{
+                        alert('要選擇使用帳號。');
+                    }
+                });
+
+            })
+            .fail(function(res){
+                alert('Fuck');
+            });
+            //              //
+            //              //
+            //     user     //
+            //              //
+            //              //
+
+            var user_id = 0;
+
             var user_all = $('.user_all');
             $.ajax({
                 url: subUrl+'/api/getUser',
@@ -105,37 +177,14 @@
                     $(user_all).append(tr);
                 }
                 $('.radioWho').change(function(){
-                    console.log(this.value);
+                    user_id = this.value;
                 });
             })
             .fail(function(res){
                 alert('Fuck');
             });
 
-            var book_all = $('.book_all');
-            $.ajax({
-                url: subUrl+'/api/getBook',
-                type: 'GET'
-            })
-            .done(function(res){
-                // console.log(res.status);
-                for(var i=0; i<res.status.length ; i++){
-                    var div = document.createElement('div');
-                    div.className = 'book';
-                    div.innerHTML = `
-                        <a class="aaa" href="./booksalon/addArc">
-                            `+res.status[i].name+`
-                        </a>
-                    `;
 
-                    div.id = 'book_'+res.status[i].id;
-                    $(div).appendTo(book_all);
-                }
-
-            })
-            .fail(function(res){
-                alert('Fuck');
-            });
         });
         
     </script>
