@@ -10,9 +10,15 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
 
-        
+        <style>
+            .title{
+                width: 100%;
+                text-align: center;
+            }
+        </style>
     </head>
     <body>
-        bookaddarc
+        <div class="title"><h1>Book Add Arc</h1></div>
+                
     </body>
 </html>

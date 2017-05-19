@@ -103,6 +103,10 @@
 
     </body>
     <script type="text/javascript">
+
+        var deleteWho = 0;    
+
+
         $(function(){
             var subUrl = 'http://127.0.0.1:8080';
 
@@ -171,7 +175,7 @@
                             <td class="td1"><input class="radioWho" type="radio" name="123" value="`+res.status[i].id+`"></td>
                             <td class="td2">`+res.status[i].id+`</td>
                             <td class="td3">`+res.status[i].name+`</td>
-                            <td class="td4"><input  type="checkbox"></td>
+                            <td class="td4"><input  type="radio" name="456" class="deleteWho" value="`+res.status[i].id+`"></td>
                     `;
                     tr.id = 'user_'+res.status[i].id;
                     $(user_all).append(tr);
@@ -179,10 +183,33 @@
                 $('.radioWho').change(function(){
                     user_id = this.value;
                 });
+                $('.deleteWho').change(function(){
+                    deleteWho = this.value;
+                });
+
+
             })
             .fail(function(res){
                 alert('Fuck');
             });
+            $('.td4btn').on('click',function(){
+                if ( deleteWho == 0 ) {
+                    alert('choose user to delete');
+                }else{
+                    $('#user_'+deleteWho).remove();
+                    $.ajax({
+                        url: subUrl+'/api/users/'+deleteWho,
+                        type: 'DELETE'
+                    })   
+                    .fail(function(res){
+                        console.log(res);
+                    })
+                    .fail(function(res){
+                        console.log(res);
+                    });
+                }
+            });
+            
 
 
         });
